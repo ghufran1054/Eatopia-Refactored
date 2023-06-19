@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "218878692037",
+    "project_id": "eatopia-refactored",
+    "storage_bucket": "eatopia-refactored.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218878692037:android:2d2d6dee04987f75c03eac",
+        "android_client_info": {
+          "package_name": "com.example.eatopia_refactored"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "218878692037-47irdq0o4ll0ii8msd6ikdhjselnkamj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP0no3aUEWx2pDq-tKzLMDrOrdducwkqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218878692037-47irdq0o4ll0ii8msd6ikdhjselnkamj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
