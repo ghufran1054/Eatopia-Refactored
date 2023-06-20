@@ -1,16 +1,7 @@
 # eatopia_refactored
 
-A new Flutter project.
+This application is the refactored version of the orignal one with better practices.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Changes
+* The First Major change is using provider state mangement to handle UI changes and manage state instead of setState() provided by flutter.
+* Writing Code in well structured manner using MVC architecture. 
