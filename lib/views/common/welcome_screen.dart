@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 //import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eatopia_refactored/firebase/authentication/auth_services.dart';
 import 'package:eatopia_refactored/routes/routes.dart';
+import 'package:eatopia_refactored/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -86,7 +89,16 @@ class WelcomePage extends StatelessWidget {
                 // change background color of button
                 backgroundColor: Colors.white, // change text color of button
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                String result =
+                    await context.read<AuthServices>().signInWithGoogle();
+                if (result != "SUCCESS") {
+                  showSnackBar(context, result);
+                  return;
+                }
+                Navigator.pushReplacementNamed(
+                    context, RouteManager.customerHomeScreen);
+              },
               label: const Text(
                 "Continue with Google",
                 style: TextStyle(color: Colors.black, fontSize: 17),

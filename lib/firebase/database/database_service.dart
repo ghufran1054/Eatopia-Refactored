@@ -7,12 +7,14 @@ class DbServices {
   static final db = FirebaseFirestore.instance;
 
   static Future<Customer> getCustomer(String uid) async {
-    final docSnapshot = await db.collection('Customers').doc(uid).get();
+    final docSnapshot =
+        await db.collection(Collections.customers).doc(uid).get();
     return Customer.fromDocument(docSnapshot);
   }
 
   static Future<bool> isCustomer(User user) async {
-    final docSnapshot = await db.collection('Customers').doc(user.uid).get();
+    final docSnapshot =
+        await db.collection(Collections.customers).doc(user.uid).get();
     if (docSnapshot.exists) {
       return true;
     } else {

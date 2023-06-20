@@ -354,8 +354,10 @@ class _UserSignUpScreenTwoState extends State<UserSignUpScreenTwo> {
                             String result = await value.signUpCustomerwithEmail(
                                 customer, passwordController.text);
                             if (result == 'SUCCESS') {
-                              Navigator.pushReplacementNamed(
-                                  context, RouteManager.customerHomeScreen);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  RouteManager.customerHomeScreen,
+                                  (route) => false);
                             } else {
                               showSnackBar(context, result);
                             }

@@ -5,6 +5,7 @@ import 'package:eatopia_refactored/models/customer.dart';
 import 'package:eatopia_refactored/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,6 +27,8 @@ class AuthServices with ChangeNotifier {
                       "The connection has timed out, please try again later.",
                   code: "timeout"));
     } on FirebaseAuthException catch (e) {
+      processing = false;
+      notifyListeners();
       return e.message!;
     }
     processing = false;
@@ -68,12 +71,12 @@ class AuthServices with ChangeNotifier {
       bool isCustomer = await DbServices.isCustomer(user!);
       if (isCustomer) {
         _customer = await DbServices.getCustomer(user!.uid);
-        Navigator.pushReplacementNamed(
-            context, RouteManager.customerHomeScreen);
+        Navigator.pushNamedAndRemoveUntil(
+            context, RouteManager.customerHomeScreen, (route) => false);
       } else {
         //TODO: Get the restaurant object and set it
-        Navigator.pushReplacementNamed(
-            context, RouteManager.restaurantHomeScreen);
+        Navigator.pushNamedAndRemoveUntil(
+            context, RouteManager.restaurantHomeScreen, (route) => false);
       }
     }
   }
@@ -85,10 +88,69 @@ class AuthServices with ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "user-not-found":
+          return false;
         case "invalid-email":
+          return false;
+        case "unknown":
           return false;
       }
     }
     return true;
+  }
+
+  Future<String> signInWithGoogle() async {
+    User? user;
+    processing = true;
+    notifyListeners();
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    if (googleSignInAccount == null) {
+      processing = false;
+      notifyListeners();
+      return "You have cancelled the sign in process !";
+    }
+
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    try {
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      user = userCredential.user;
+      await DbServices.addCustomer(
+          Customer(
+            name: user!.displayName,
+            email: user.email,
+            phone: user.phoneNumber,
+          ),
+          user.uid);
+    } on FirebaseAuthException catch (e) {
+      processing = false;
+      notifyListeners();
+      return e.message!;
+    } catch (e) {
+      processing = false;
+      notifyListeners();
+      return e.toString();
+    }
+
+    processing = false;
+    notifyListeners();
+    return "SUCCESS";
+  }
+
+  Future<void> signOut() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    await _auth.signOut();
+    _customer = null;
+    notifyListeners();
   }
 }

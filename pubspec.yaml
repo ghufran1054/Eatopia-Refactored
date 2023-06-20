@@ -43,6 +43,7 @@ dependencies:
   provider:
   shared_preferences:
   email_validator:
+  google_sign_in:
 
 dev_dependencies:
   flutter_test:
