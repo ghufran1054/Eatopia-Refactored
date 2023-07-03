@@ -1,10 +1,13 @@
 import 'package:eatopia_refactored/views/common/login_screen.dart';
+import 'package:eatopia_refactored/views/common/map_screen.dart';
 import 'package:eatopia_refactored/views/customer/customer_home_screen.dart';
 import 'package:eatopia_refactored/views/customer/sign_up_screen.dart';
 import 'package:eatopia_refactored/views/common/splash_screen.dart';
 import 'package:eatopia_refactored/views/common/welcome_screen.dart';
 import 'package:eatopia_refactored/views/restaurant/restaurant_home_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../views/restaurant/restaurant_sign_up.dart';
 
 class RouteManager {
   static const String splashScreen = '/';
@@ -14,6 +17,8 @@ class RouteManager {
   static const String userSignUpScreenTwo = '/userSignUpScreenTwo';
   static const String customerHomeScreen = '/customerHomeScreen';
   static const String restaurantHomeScreen = '/restaurantHomeScreen';
+  static const String businessSignUpScreen = '/businessSignUpScreen';
+  static const String mapScreen = '/mapScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -44,6 +49,14 @@ class RouteManager {
       case restaurantHomeScreen:
         return MaterialPageRoute<dynamic>(
           builder: (_) => const RestaurantHomeScreen(),
+        );
+      case businessSignUpScreen:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const BusinessSignUpScreen(),
+        );
+      case mapScreen:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const MapScreen(),
         );
       default:
         return MaterialPageRoute<dynamic>(

@@ -35,7 +35,12 @@ class CustomerHomeScreen extends StatelessWidget {
                 },
                 child: const Text("Logout")),
             const SizedBox(height: 20),
-            TextButton(onPressed: () {}, child: const Text("Business Sign Up")),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, RouteManager.businessSignUpScreen);
+                },
+                child: const Text("Business Sign Up")),
           ],
         ),
       ),

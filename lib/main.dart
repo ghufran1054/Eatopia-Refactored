@@ -1,5 +1,6 @@
 import 'package:eatopia_refactored/firebase/authentication/auth_services.dart';
 import 'package:eatopia_refactored/routes/routes.dart';
+import 'package:eatopia_refactored/services/maps_services.dart';
 import 'package:eatopia_refactored/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +19,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => ThemeManager()),
           ChangeNotifierProvider(create: (_) => AuthServices()),
+          ChangeNotifierProvider(create: (_) => MapsServices()),
         ],
         builder: (context, child) {
           return MaterialApp(

@@ -3,6 +3,7 @@
 import 'package:eatopia_refactored/firebase/authentication/auth_services.dart';
 import 'package:eatopia_refactored/routes/routes.dart';
 import 'package:eatopia_refactored/widgets/custom_text_field.dart';
+import 'package:eatopia_refactored/widgets/overlay_loader.dart';
 import 'package:eatopia_refactored/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
@@ -32,141 +33,148 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).primaryColor;
-    return Scaffold(
-      appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          toolbarHeight: 70,
-          title:
-              const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Image(image: AssetImage('assets/images/eatopia.png'), height: 50),
-            SizedBox(width: 10),
-            Text('EATOPIA',
-                style: TextStyle(
-                    color: Colors.black,
-                    letterSpacing: 2,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold))
-          ])),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Login',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.5,
-              ),
+    return Stack(children: [
+      Scaffold(
+        appBar: AppBar(
+            iconTheme: const IconThemeData(
+              color: Colors.black,
             ),
-            const SizedBox(height: 40),
-            Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    //EMAIL TEXT FIELD
-                    CustomTextField(
-                        icon: const Icon(
-                          Icons.email,
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            toolbarHeight: 70,
+            title: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image(
+                      image: AssetImage('assets/images/eatopia.png'),
+                      height: 50),
+                  SizedBox(width: 10),
+                  Text('EATOPIA',
+                      style: TextStyle(
                           color: Colors.black,
-                          size: 20,
-                        ),
-                        labelText: 'Email',
-                        hintText: 'Enter your email',
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          if (!EmailValidator.validate(value)) {
-                            return 'Please enter a valid email';
-                          }
-                          return null;
-                        },
-                        textController: emailController,
-                        boxH: 100,
-                        primaryColor: primaryColor),
-                    const SizedBox(height: 20),
-
-                    PasswordTextField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                        passwordController: passwordController,
-                        boxPassH: 100,
-                        primaryColor: primaryColor),
-                    const SizedBox(height: 20),
-                  ],
-                )),
-            Consumer<AuthServices>(
-              builder: (context, value, child) {
-                return ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(primaryColor),
-                        fixedSize: MaterialStateProperty.all<Size>(Size(
-                            MediaQuery.of(context).size.width / 3,
-                            MediaQuery.of(context).size.height / 18)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                          letterSpacing: 2,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold))
+                ])),
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              const SizedBox(height: 40),
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      //EMAIL TEXT FIELD
+                      CustomTextField(
+                          icon: const Icon(
+                            Icons.email,
+                            color: Colors.black,
+                            size: 20,
                           ),
-                        )),
-                    onPressed: () async {
-                      if (!_formKey.currentState!.validate()) {
-                        return;
-                      }
-                      String result = await value.signInWithEmail(
-                          emailController.text, passwordController.text);
-                      if (result != 'SUCCESS') {
-                        showSnackBar(context, result);
-                      } else {
-                        context.read<AuthServices>().redirectToScreen(context);
-                      }
-                    },
-                    child: value.processing
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 1,
-                          )
-                        : const Text(
-                            'Login',
-                          ));
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Don\'t have an account?'),
-                TextButton(
+                          labelText: 'Email',
+                          hintText: 'Enter your email',
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!EmailValidator.validate(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                          textController: emailController,
+                          boxH: 100,
+                          primaryColor: primaryColor),
+                      const SizedBox(height: 20),
+
+                      PasswordTextField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
+                          labelText: 'Password',
+                          hintText: 'Enter your password',
+                          passwordController: passwordController,
+                          boxPassH: 100,
+                          primaryColor: primaryColor),
+                      const SizedBox(height: 20),
+                    ],
+                  )),
+              ElevatedButton(
                   style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(primaryColor),
-                  ),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, RouteManager.userSignUpScreenOne);
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(primaryColor),
+                      fixedSize: MaterialStateProperty.all<Size>(Size(
+                          MediaQuery.of(context).size.width / 3,
+                          MediaQuery.of(context).size.height / 18)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      )),
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    String result = await context
+                        .read<AuthServices>()
+                        .signInWithEmail(
+                            emailController.text, passwordController.text);
+                    if (result != 'SUCCESS') {
+                      showSnackBar(context, result);
+                    } else {
+                      context.read<AuthServices>().redirectToScreen(context);
+                    }
                   },
                   child: const Text(
-                    'Sign Up',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )
-              ],
-            )
-          ],
+                    'Login',
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Don\'t have an account?'),
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(primaryColor),
+                    ),
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, RouteManager.userSignUpScreenOne);
+                    },
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
-    );
+      Selector<AuthServices, bool>(
+        selector: (context, value) => value.processing,
+        builder: (context, value, child) {
+          if (value) {
+            return const OverlayLoader();
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
+    ]);
   }
 }

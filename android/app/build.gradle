@@ -5,6 +5,11 @@ if (localPropertiesFile.exists()) {
         localProperties.load(reader)
     }
 }
+// def secureProperties = new Properties()
+// def securePropertiesFile = rootProject.file('secure.properties')
+// if (securePropertiesFile.exists()) {
+//     secureProperties.load(new FileInputStream(securePropertiesFile))
+// }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
@@ -27,7 +32,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.example.eatopia_refactored"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -52,6 +57,10 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        manifestPlaceholders += [
+            MAPS_API_KEY: localProperties.getProperty('MAPS_API_KEY')
+        ]
     }
 
     buildTypes {
@@ -70,3 +79,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
+

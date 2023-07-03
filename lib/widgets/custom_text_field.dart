@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
     required this.validator,
     this.icon,
     this.inputType = TextInputType.text,
+    this.readOnly = false,
   }) : _primaryColor = primaryColor;
 
   final TextEditingController textController;
@@ -21,6 +22,7 @@ class CustomTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final Icon? icon;
   final TextInputType inputType;
+  final bool readOnly;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
